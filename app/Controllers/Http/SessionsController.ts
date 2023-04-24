@@ -6,12 +6,12 @@ export default class SessionsController {
    public async store({ request, response, auth }: HttpContextContract) {
       await request.validate(StoreSessionValidator)
 
-      const userAuth = request.input('userAuth') as string
+      const email = request.input('email') as string
       const password = request.input('password') as string
 
-      const user = await User.findByOrFail('email', userAuth)
+      const user = await User.findByOrFail('email', email)
 
-      const token = await auth.use('api').attempt(userAuth, password, { expiresIn: '7days' })
+      const token = await auth.use('api').attempt(email, password, { expiresIn: '7days' })
 
       const expires = Number(token.expiresAt)
 

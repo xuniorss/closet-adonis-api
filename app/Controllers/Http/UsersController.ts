@@ -18,10 +18,10 @@ export default class UsersController {
 
       if (!user) return response.badRequest()
 
-      const userAuth = userPayload.email
+      const email = userPayload.email
       const password = userPayload.password
 
-      const token = await auth.use('api').attempt(userAuth, password, { expiresIn: '7days' })
+      const token = await auth.use('api').attempt(email, password, { expiresIn: '7days' })
 
       const expires = Number(token.expiresAt)
 

@@ -24,7 +24,7 @@ export default class StoreSessionValidator {
     *    ```
     */
    public schema = schema.create({
-      userAuth: schema.string({}, [rules.email()]),
+      email: schema.string({}, [rules.email()]),
       password: schema.string({}, [rules.minLength(8)]),
    })
 
