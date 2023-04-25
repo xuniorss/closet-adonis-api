@@ -27,4 +27,9 @@ export default class UsersController {
 
       return response.created({ user, token, expires })
    }
+
+   public async index({ response, auth }: HttpContextContract) {
+      const user = await User.findOrFail(auth.user!.id)
+      return response.ok(user)
+   }
 }

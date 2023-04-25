@@ -14,6 +14,7 @@ export default class extends BaseSchema {
             .onDelete('CASCADE')
             .comment('identification of the logged in user who registered the model')
          table.string('model_name', 100).notNullable().unique()
+         table.string('description', 200).nullable().defaultTo(null)
          /**
           * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
           */

@@ -26,3 +26,8 @@ Route.get('/', async () => {
 
 Route.post('/create-account', 'UsersController.store')
 Route.post('/create-session', 'SessionsController.store')
+
+Route.group(() => {
+   Route.get('/me', 'UsersController.index')
+   Route.post('/create-model', 'ModelsController.store')
+}).middleware('auth')

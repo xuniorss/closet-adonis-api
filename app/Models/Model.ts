@@ -12,6 +12,9 @@ export default class Model extends BaseModel {
    @column({ columnName: 'model_name' })
    public modelName: string
 
+   @column()
+   public description: string | null
+
    @column.dateTime({ autoCreate: true })
    public createdAt: DateTime
 
