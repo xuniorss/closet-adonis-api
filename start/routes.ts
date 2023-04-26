@@ -29,5 +29,9 @@ Route.post('/create-session', 'SessionsController.store')
 
 Route.group(() => {
    Route.get('/me', 'UsersController.index')
+
    Route.post('/create-model', 'ModelsController.store')
+   Route.get('/models', 'ModelsController.index')
+
+   Route.post('/create-product', 'ProductsController.store')
 }).middleware('auth')

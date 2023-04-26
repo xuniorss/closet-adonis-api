@@ -20,4 +20,9 @@ export default class ModelsController {
 
       return response.created(model)
    }
+
+   public async index({ response }: HttpContextContract) {
+      const models = await Model.query().select('*')
+      return response.ok(models)
+   }
 }
