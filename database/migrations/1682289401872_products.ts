@@ -13,7 +13,7 @@ export default class extends BaseSchema {
             .inTable('users')
             .onDelete('CASCADE')
             .comment('identification of the logged in user who registered the product')
-         table.string('product_code', 10).notNullable().unsigned()
+         table.string('product_code', 10).notNullable().unsigned().unique()
          table.uuid('model_id').unsigned().references('id').inTable('models').onDelete('CASCADE')
          table.string('product_name', 200).notNullable()
          table.decimal('price', 14, 2).notNullable().defaultTo(0).comment('Value in BRL')
