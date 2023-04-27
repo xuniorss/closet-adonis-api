@@ -6,10 +6,7 @@ export default class ProductsController {
    public async store({ request, response, auth }: HttpContextContract) {
       const prodcutPayload = await request.validate(CreateProductValidator)
 
-      const price = prodcutPayload.price
-         .slice(3, prodcutPayload.price.length)
-         .replace(/\./g, '')
-         .replace(/\,/g, '.')
+      const price = prodcutPayload.price.replace(/\./g, '').replace(/\,/g, '.')
 
       prodcutPayload.price = price
 
