@@ -28,6 +28,7 @@ Route.post('/create-account', 'UsersController.store')
 Route.post('/create-session', 'SessionsController.store')
 
 Route.get('/products', 'ProductsController.index')
+Route.get('/products/:productid', 'ProductsController.indexById')
 
 Route.group(() => {
    Route.get('/me', 'UsersController.index')

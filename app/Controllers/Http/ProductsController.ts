@@ -24,4 +24,12 @@ export default class ProductsController {
       const products = await Product.query().select('*').where('quantity', '>', '0')
       return response.ok(products)
    }
+
+   public async indexById({ request, response }: HttpContextContract) {
+      const productid = request.param('productid') as string
+
+      const product = await Product.findOrFail(productid)
+
+      return response.ok(product)
+   }
 }
