@@ -25,7 +25,7 @@ export default class Product extends BaseModel {
    public size: string
 
    @column()
-   public description: string
+   public description: string | null
 
    @column()
    public quantity: number

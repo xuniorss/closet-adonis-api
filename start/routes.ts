@@ -35,6 +35,8 @@ Route.get('/products-week', 'ProductsController.newsWeekIndex')
 Route.group(() => {
    Route.get('/me', 'UsersController.index')
 
+   Route.post('/create-size', 'SizesController.store')
+
    Route.post('/create-model', 'ModelsController.store')
    Route.get('/models', 'ModelsController.index')
 
