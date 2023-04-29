@@ -21,7 +21,10 @@ export default class ProductsController {
    }
 
    public async index({ response }: HttpContextContract) {
-      const products = await Product.query().select('*').where('quantity', '>', '0')
+      const products = await Product.query()
+         .select('*')
+         .where('quantity', '>', '0')
+         .orderBy('created_at', 'desc')
       return response.ok(products)
    }
 
@@ -31,5 +34,25 @@ export default class ProductsController {
       const product = await Product.findOrFail(productid)
 
       return response.ok(product)
+   }
+
+   public async newsTodayIndex({ response }: HttpContextContract) {
+      const todayProducts = await Product.query()
+         .select('*')
+         .where('quantity', '>', '0')
+         .andWhereRaw('created_at::date = CURRENT_DATE')
+         .orderBy('created_at', 'desc')
+
+      return response.ok(todayProducts)
+   }
+
+   public async newsWeekIndex({ response }: HttpContextContract) {
+      const weekProducts = await Product.query()
+         .select('*')
+         .where('quantity', '>', '0')
+         .andWhereRaw(`DATE(created_at) BETWEEN NOW() - INTERVAL '7 days' AND NOW()`)
+         .orderBy('created_at', 'desc')
+
+      return response.ok(weekProducts)
    }
 }
