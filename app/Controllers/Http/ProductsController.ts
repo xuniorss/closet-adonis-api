@@ -1,5 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Product from 'App/Models/Product'
+import ProductsImage from 'App/Models/ProductsImage'
+import ProductsSize from 'App/Models/ProductsSize'
 import CreateProductValidator from 'App/Validators/CreateProductValidator'
 
 export default class ProductsController {
@@ -11,11 +13,30 @@ export default class ProductsController {
       prodcutPayload.price = price
 
       const data = {
-         ...prodcutPayload,
          user_id: auth.user!.id,
+         model_id: prodcutPayload.model_id,
+         product_name: prodcutPayload.product_name,
+         price: prodcutPayload.price,
+         description: prodcutPayload.description,
+         quantity: prodcutPayload.quantity,
       }
 
-      await Product.create(data)
+      await Product.create(data).then(async (response) => {
+         const dataSizes = prodcutPayload.size.map((size) => ({
+            productId: response.id,
+            sizeId: size,
+         }))
+
+         const dataImages = prodcutPayload.image_url.map((image) => ({
+            productId: response.id,
+            imageUrl: image,
+         }))
+
+         await Promise.all([
+            ProductsSize.createMany(dataSizes),
+            ProductsImage.createMany(dataImages),
+         ])
+      })
 
       return response.created()
    }

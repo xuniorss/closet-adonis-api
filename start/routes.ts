@@ -36,6 +36,7 @@ Route.group(() => {
    Route.get('/me', 'UsersController.index')
 
    Route.post('/create-size', 'SizesController.store')
+   Route.get('/sizes', 'SizesController.index')
 
    Route.post('/create-model', 'ModelsController.store')
    Route.get('/models', 'ModelsController.index')

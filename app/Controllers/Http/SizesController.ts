@@ -25,4 +25,9 @@ export default class SizesController {
 
       return response.created()
    }
+
+   public async index({ response }: HttpContextContract) {
+      const sizes = await Size.query().select('*').orderBy('size', 'asc')
+      return response.ok(sizes)
+   }
 }
