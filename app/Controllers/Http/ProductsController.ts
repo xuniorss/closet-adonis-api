@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Database from '@ioc:Adonis/Lucid/Database'
 import Product from 'App/Models/Product'
 import ProductsImage from 'App/Models/ProductsImage'
 import ProductsSize from 'App/Models/ProductsSize'
@@ -42,38 +43,82 @@ export default class ProductsController {
    }
 
    public async index({ response }: HttpContextContract) {
-      const products = await Product.query()
-         .select('*')
-         .where('quantity', '>', '0')
-         .orderBy('created_at', 'desc')
-      return response.ok(products)
+      const products = await Database.rawQuery(`
+         SELECT products.*, image.image_url FROM products
+         LEFT JOIN (
+         SELECT DISTINCT ON (products_images.product_id)
+            products_images.product_id as prod_id,
+            products_images.image_url as image_url
+         FROM products_images
+         ) AS image
+         ON image.prod_id = products.id
+         WHERE products.quantity > 0
+         GROUP BY products.id, image.image_url
+         ORDER BY products.created_at DESC
+      `)
+
+      return response.ok(products.rows)
    }
 
    public async indexById({ request, response }: HttpContextContract) {
       const productid = request.param('productid') as string
 
-      const product = await Product.findOrFail(productid)
+      const [product, productImage, productSize] = await Promise.all([
+         Product.findOrFail(productid),
+         ProductsImage.query().select('*').where('product_id', productid),
+         Database.rawQuery(`
+            select distinct
+               products_sizes.*,
+               sizes.size
+            from products_sizes
+            left join sizes on sizes.id = products_sizes.size_id
+            where products_sizes.product_id = '${productid}'
+            order by sizes.size desc
+         `),
+      ])
 
-      return response.ok(product)
+      const data = {
+         product,
+         productImage,
+         productSize: productSize.rows,
+      }
+
+      return response.ok(data)
    }
 
    public async newsTodayIndex({ response }: HttpContextContract) {
-      const todayProducts = await Product.query()
-         .select('*')
-         .where('quantity', '>', '0')
-         .andWhereRaw('created_at::date = CURRENT_DATE')
-         .orderBy('created_at', 'desc')
+      const todayProducts = await Database.rawQuery(`
+         SELECT products.*, image.image_url FROM products
+         LEFT JOIN (
+         SELECT DISTINCT ON (products_images.product_id)
+            products_images.product_id as prod_id,
+            products_images.image_url as image_url
+         FROM products_images
+         ) AS image
+         ON image.prod_id = products.id
+         where products.quantity > 0
+         and created_at::date = CURRENT_DATE
+         order by created_at desc
+      `)
 
-      return response.ok(todayProducts)
+      return response.ok(todayProducts.rows)
    }
 
    public async newsWeekIndex({ response }: HttpContextContract) {
-      const weekProducts = await Product.query()
-         .select('*')
-         .where('quantity', '>', '0')
-         .andWhereRaw(`DATE(created_at) BETWEEN NOW() - INTERVAL '7 days' AND NOW()`)
-         .orderBy('created_at', 'desc')
+      const weekProducts = await Database.rawQuery(`
+         SELECT products.*, image.image_url FROM products
+         LEFT JOIN (
+         SELECT DISTINCT ON (products_images.product_id)
+            products_images.product_id as prod_id,
+            products_images.image_url as image_url
+         FROM products_images
+         ) AS image
+         ON image.prod_id = products.id
+         where products.quantity > 0
+         and DATE(created_at) BETWEEN NOW() - INTERVAL '7 days' AND NOW()
+         order by created_at desc
+      `)
 
-      return response.ok(weekProducts)
+      return response.ok(weekProducts.rows)
    }
 }
