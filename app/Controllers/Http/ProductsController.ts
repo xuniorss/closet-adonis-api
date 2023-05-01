@@ -60,6 +60,27 @@ export default class ProductsController {
       return response.ok(products.rows)
    }
 
+   public async indexByQueryString({ request, response }: HttpContextContract) {
+      const qs = request.qs()
+
+      const qsResult = await Database.rawQuery(`
+         SELECT products.*, image.image_url FROM products
+         LEFT JOIN (
+         SELECT DISTINCT ON (products_images.product_id)
+            products_images.product_id as prod_id,
+            products_images.image_url as image_url
+         FROM products_images
+         ) AS image
+         ON image.prod_id = products.id
+         WHERE products.quantity > 0
+         AND LOWER(products.product_name) like '%${qs.q}%'
+         GROUP BY products.id, image.image_url
+         ORDER BY products.created_at DESC
+      `)
+
+      return response.ok(qsResult.rows)
+   }
+
    public async indexById({ request, response }: HttpContextContract) {
       const productid = request.param('productid') as string
 

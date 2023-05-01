@@ -31,6 +31,7 @@ Route.get('/products', 'ProductsController.index')
 Route.get('/products/:productid', 'ProductsController.indexById')
 Route.get('/products-today', 'ProductsController.newsTodayIndex')
 Route.get('/products-week', 'ProductsController.newsWeekIndex')
+Route.get('/products-qs', 'ProductsController.indexByQueryString')
 
 Route.group(() => {
    Route.get('/me', 'UsersController.index')
