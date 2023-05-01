@@ -3,7 +3,9 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import Product from 'App/Models/Product'
 import ProductsImage from 'App/Models/ProductsImage'
 import ProductsSize from 'App/Models/ProductsSize'
+import ProductsSpecification from 'App/Models/ProductsSpecification'
 import CreateProductValidator from 'App/Validators/CreateProductValidator'
+import crypto from 'crypto'
 
 export default class ProductsController {
    public async store({ request, response, auth }: HttpContextContract) {
@@ -37,6 +39,20 @@ export default class ProductsController {
             ProductsSize.createMany(dataSizes),
             ProductsImage.createMany(dataImages),
          ])
+
+         if (prodcutPayload.color || prodcutPayload.composition) {
+            const randomBytes = crypto.randomBytes(4) // gera 4 bytes aleatórios
+            const randomNumber = parseInt(randomBytes.toString('hex'), 16) % 100000000 // converte os bytes em um número de 8 dígitos
+
+            const dataSpec = {
+               product_id: response.id,
+               color: prodcutPayload.color,
+               composition: prodcutPayload.composition,
+               generic_code: String(randomNumber),
+            }
+
+            await ProductsSpecification.create(dataSpec)
+         }
       })
 
       return response.created()
@@ -84,7 +100,7 @@ export default class ProductsController {
    public async indexById({ request, response }: HttpContextContract) {
       const productid = request.param('productid') as string
 
-      const [product, productImage, productSize] = await Promise.all([
+      const [product, productImage, productSize, productSpec] = await Promise.all([
          Product.findOrFail(productid),
          ProductsImage.query().select('*').where('product_id', productid),
          Database.rawQuery(`
@@ -96,12 +112,14 @@ export default class ProductsController {
             where products_sizes.product_id = '${productid}'
             order by sizes.size desc
          `),
+         ProductsSpecification.findBy('product_id', productid),
       ])
 
       const data = {
          product,
          productImage,
          productSize: productSize.rows,
+         productSpec,
       }
 
       return response.ok(data)

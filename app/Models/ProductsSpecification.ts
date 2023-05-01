@@ -2,15 +2,21 @@ import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import { v4 as uuid } from 'uuid'
 
-export default class ProductsSize extends BaseModel {
+export default class ProductsSpecification extends BaseModel {
    @column({ isPrimary: true })
    public id: string
 
    @column({ columnName: 'product_id' })
    public productId: string
 
-   @column({ columnName: 'size_id' })
-   public sizeId: string
+   @column()
+   public color: string | null
+
+   @column()
+   public composition: string | null
+
+   @column({ columnName: 'generic_code' })
+   public genericCode: string
 
    @column.dateTime({ autoCreate: true })
    public createdAt: DateTime
@@ -19,7 +25,7 @@ export default class ProductsSize extends BaseModel {
    public updatedAt: DateTime
 
    @beforeSave()
-   public static async productSizeConfigs(psize: ProductsSize) {
-      psize.id = uuid()
+   public static async productSpecConfigs(pspec: ProductsSpecification) {
+      pspec.id = uuid()
    }
 }

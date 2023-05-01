@@ -25,16 +25,15 @@ export default class CreateProductValidator {
     *    ```
     */
    public schema = schema.create({
-      // product_code: schema.string({}, [rules.minLength(1), rules.maxLength(10)]),
       product_name: schema.string({}, [rules.minLength(1), rules.maxLength(200)]),
       model_id: schema.string({}, [rules.uuid()]),
       size: schema.array().members(schema.string({}, [rules.uuid()])),
       price: schema.string({}),
       quantity: schema.number(),
       description: schema.string.optional({}, [rules.maxLength(500)]),
-      // image_url: schema.string({}, [rules.url()]),
-      // image_id: schema.number(),
       image_url: schema.array().members(schema.string({}, [rules.url()])),
+      color: schema.string.optional({}, [rules.maxLength(7)]),
+      composition: schema.string.optional({}, [rules.maxLength(50)]),
    })
 
    /**
