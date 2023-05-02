@@ -13,6 +13,7 @@ export default class extends BaseSchema {
             .inTable('products')
             .onDelete('CASCADE')
          table.string('image_url', 500).notNullable()
+         table.bigInteger('media_id').notNullable()
 
          /**
           * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

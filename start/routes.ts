@@ -45,4 +45,5 @@ Route.group(() => {
    Route.get('/models', 'ModelsController.index')
 
    Route.post('/create-product', 'ProductsController.store')
+   Route.delete('/delete-product/:productid', 'ProductsController.deleteProducts')
 }).middleware('auth')

@@ -34,6 +34,7 @@ export default class CreateProductValidator {
       image_url: schema.array().members(schema.string({}, [rules.url()])),
       color: schema.string.optional({}, [rules.maxLength(7)]),
       composition: schema.string.optional({}, [rules.maxLength(50)]),
+      mediaId: schema.number(),
    })
 
    /**

@@ -12,6 +12,9 @@ export default class ProductsImage extends BaseModel {
    @column({ columnName: 'image_url' })
    public imageUrl: string
 
+   @column({ columnName: 'media_id' })
+   public mediaId: number
+
    @column.dateTime({ autoCreate: true })
    public createdAt: DateTime
 

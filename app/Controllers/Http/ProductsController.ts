@@ -33,6 +33,7 @@ export default class ProductsController {
          const dataImages = prodcutPayload.image_url.map((image) => ({
             productId: response.id,
             imageUrl: image,
+            mediaId: prodcutPayload.mediaId,
          }))
 
          await Promise.all([
@@ -217,5 +218,13 @@ export default class ProductsController {
       `)
 
       return response.ok(weekProducts.rows)
+   }
+
+   public async deleteProducts({ request, response }: HttpContextContract) {
+      const productid = request.param('productid') as string
+
+      await Product.query().delete().where('id', productid)
+
+      return response.noContent()
    }
 }
