@@ -89,8 +89,10 @@ export default class ProductsController {
          FROM products_images
          ) AS image
          ON image.prod_id = products.id
+         left join products_specifications as ps on ps.product_id = products.id
          WHERE products.quantity > 0
          AND LOWER(products.product_name) like '%${qs.q}%'
+         OR ps.generic_code like '%${qs.q}%'
          GROUP BY products.id, image.image_url
          ORDER BY products.created_at DESC
       `)
