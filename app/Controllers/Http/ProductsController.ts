@@ -186,8 +186,10 @@ export default class ProductsController {
       return response.ok(products.rows)
    }
 
-   public async newsTodayIndex({ response }: HttpContextContract) {
-      const todayProducts = await Database.rawQuery(`
+   public async collectionIndex({ request, response }: HttpContextContract) {
+      const modelid = request.param('modelid') as string
+
+      const collectionProducts = await Database.rawQuery(`
          SELECT products.*, image.image_url FROM products
          LEFT JOIN (
          SELECT DISTINCT ON (products_images.product_id)
@@ -197,11 +199,11 @@ export default class ProductsController {
          ) AS image
          ON image.prod_id = products.id
          where products.quantity > 0
-         and created_at::date = CURRENT_DATE
+         and products.model_id = '${modelid}'
          order by created_at desc
       `)
 
-      return response.ok(todayProducts.rows)
+      return response.ok(collectionProducts.rows)
    }
 
    public async newsWeekIndex({ response }: HttpContextContract) {

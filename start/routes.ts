@@ -29,7 +29,7 @@ Route.post('/create-session', 'SessionsController.store')
 
 Route.get('/products', 'ProductsController.index')
 Route.get('/products/:productid', 'ProductsController.indexById')
-Route.get('/products-today', 'ProductsController.newsTodayIndex')
+Route.get('/collection/:modelid', 'ProductsController.collectionIndex')
 Route.get('/products-week', 'ProductsController.newsWeekIndex')
 Route.get('/products-qs', 'ProductsController.indexByQueryString')
 Route.get('/products-related/:productid', 'ProductsController.relatedProductsIndex')
