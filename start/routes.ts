@@ -29,11 +29,13 @@ Route.post('/create-session', 'SessionsController.store')
 
 Route.get('/products', 'ProductsController.index')
 Route.get('/products/:productid', 'ProductsController.indexById')
-Route.get('/collection/:modelid', 'ProductsController.collectionIndex')
 Route.get('/products-week', 'ProductsController.newsWeekIndex')
 Route.get('/products-qs', 'ProductsController.indexByQueryString')
 Route.get('/products-related/:productid', 'ProductsController.relatedProductsIndex')
 Route.get('/products-norelated/:productid', 'ProductsController.noRelatedProductsIndex')
+
+Route.get('/collection/:modelid', 'ProductsController.collectionIndex')
+Route.get('/models', 'ModelsController.index')
 
 Route.group(() => {
    Route.get('/me', 'UsersController.index')
@@ -42,8 +44,8 @@ Route.group(() => {
    Route.get('/sizes', 'SizesController.index')
 
    Route.post('/create-model', 'ModelsController.store')
-   Route.get('/models', 'ModelsController.index')
 
    Route.post('/create-product', 'ProductsController.store')
    Route.delete('/delete-product/:productid', 'ProductsController.deleteProducts')
+   Route.patch('/product-saled/:productid', 'ProductsController.markAsSaledProduct')
 }).middleware('auth')

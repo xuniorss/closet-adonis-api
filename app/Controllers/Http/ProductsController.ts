@@ -231,4 +231,12 @@ export default class ProductsController {
 
       return response.noContent()
    }
+
+   public async markAsSaledProduct({ request, response }: HttpContextContract) {
+      const productid = request.param('productid') as string
+
+      await Product.query().update('quantity', 0).where('id', productid)
+
+      return response.noContent()
+   }
 }
