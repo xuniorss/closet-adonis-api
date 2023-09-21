@@ -9,9 +9,6 @@ export default class Product extends BaseModel {
    @column({ columnName: 'user_id' })
    public userId: string
 
-   // @column({ columnName: 'product_code' })
-   // public productCode: string
-
    @column({ columnName: 'model_id' })
    public modelId: string
 
@@ -21,20 +18,11 @@ export default class Product extends BaseModel {
    @column()
    public price: string
 
-   // @column()
-   // public size: string
-
    @column()
    public description: string | null
 
    @column()
    public quantity: number
-
-   // @column({ columnName: 'image_url' })
-   // public imageUrl: string
-
-   // @column({ columnName: 'image_id' })
-   // public imageId: string
 
    @column.dateTime({ autoCreate: true })
    public createdAt: DateTime

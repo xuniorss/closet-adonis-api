@@ -1,5 +1,5 @@
-import { DateTime } from 'luxon'
 import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
+import { DateTime } from 'luxon'
 import { v4 as uuid } from 'uuid'
 
 export default class ProductsImage extends BaseModel {

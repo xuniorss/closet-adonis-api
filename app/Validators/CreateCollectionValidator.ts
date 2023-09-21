@@ -2,7 +2,7 @@ import { CustomMessages, rules, schema } from '@ioc:Adonis/Core/Validator'
 
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class StoreUserValidator {
+export default class CreateCollectionValidator {
    constructor(protected ctx: HttpContextContract) {}
 
    /*
@@ -25,10 +25,11 @@ export default class StoreUserValidator {
     *    ```
     */
    public schema = schema.create({
-      username: schema.string({}, [rules.minLength(1), rules.maxLength(20)]),
-      email: schema.string({}, [rules.email()]),
-      password: schema.string({}, [rules.minLength(8)]),
-      isAdm: schema.boolean.optional(),
+      name: schema.string({}, [rules.maxLength(30)]),
+      modelId: schema.string({}, [rules.uuid()]),
+      numItems: schema.number(),
+      showHome: schema.boolean(),
+      finalDate: schema.string(),
    })
 
    /**

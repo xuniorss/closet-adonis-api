@@ -6,15 +6,19 @@ export default class UsersController {
    public async store({ request, response, auth }: HttpContextContract) {
       const userPayload = await request.validate(StoreUserValidator)
 
-      const usernameAlreadyExists = await User.findBy('username', userPayload.username)
-      const emailAlreadyExists = await User.findBy('email', userPayload.email)
+      const [usernameAlreadyExists, emailAlreadyExists] = await Promise.all([
+         User.findBy('username', userPayload.username),
+         User.findBy('email', userPayload.email),
+      ])
 
       if (usernameAlreadyExists && emailAlreadyExists) throw new Error('User already exists.')
 
       if (usernameAlreadyExists) throw new Error('Username already exists.')
       if (emailAlreadyExists) throw new Error('Email already exists.')
 
-      const user = await User.create({ ...userPayload })
+      const isAdm = userPayload.isAdm ? true : false
+
+      const user = await User.create({ ...userPayload, isAdm })
 
       if (!user) return response.badRequest()
 

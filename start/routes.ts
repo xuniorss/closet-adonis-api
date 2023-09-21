@@ -37,6 +37,9 @@ Route.get('/products-norelated/:productid', 'ProductsController.noRelatedProduct
 Route.get('/collection/:modelid', 'ProductsController.collectionIndex')
 Route.get('/models', 'ModelsController.index')
 
+Route.get('/collections', 'CollectionsController.index')
+Route.get('/collections-home', 'CollectionsController.indexHome')
+
 Route.group(() => {
    Route.get('/me', 'UsersController.index')
 
@@ -48,4 +51,6 @@ Route.group(() => {
    Route.post('/create-product', 'ProductsController.store')
    Route.delete('/delete-product/:productid', 'ProductsController.deleteProducts')
    Route.patch('/product-saled/:productid', 'ProductsController.markAsSaledProduct')
+
+   Route.post('/create-collection', 'CollectionsController.store')
 }).middleware('auth')
