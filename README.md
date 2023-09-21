@@ -54,7 +54,7 @@ pnpm dev
 
 -  Use o exemplo abaixo no corpo da requisição (altere os valores caso queira). lembre-se que o `isAdm` deve ser `true`
 
-```
+```bash
 {
     "username": "Gilberto",
     "email": "email@teste.com",
